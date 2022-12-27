@@ -1,13 +1,13 @@
----
+<!---
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
 # SPDX-License-Identifier: EUPL-1.2
----
+--->
 
 # mmeson
 
 TUI to configure Meson projects similar to `ccmake` for CMake projects
 
-![](./docs/mmeson.png)
+![](./docs/screenshot.png)
 
 ## Running
 
