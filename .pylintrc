@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
+# SPDX-License-Identifier: CC0-1.0
+
+[messages control]
+disable = missing-function-docstring,missing-module-docstring,missing-class-docstring
+
+[format]
+max-line-length = 119
+indent-after-paren = 4
+indent-string = '    '
+
+[string]
+check-quote-consistency = yes

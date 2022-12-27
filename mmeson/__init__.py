@@ -1,4 +1,2 @@
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
-# SPDX-License-Identifier: CC0-1.0
-
-__pycache__/
+# SPDX-License-Identifier: EUPL-1.2
