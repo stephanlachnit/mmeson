@@ -6,6 +6,7 @@
 Module containing the singleton implementation.
 """
 
+
 class Singleton(type):
     """
     Metaclass implementing a common Singleton pattern.

@@ -60,9 +60,9 @@ autosectionlabel_prefix_document = True
 
 # sphinx.ext.autodoc settings
 autodoc_default_options = {
-    "members": True,
+    'members': True,
     'member-order': 'bysource',
-    "undoc-members": True,
+    'undoc-members': True,
 }
 
 # sphinx.ext.intersphinx settings
