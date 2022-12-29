@@ -5,3 +5,10 @@ __pycache__/
 *.egg-info/
 /dist/
 /build/
+/.pytest_cache/
+
+/docs/build/
+/docs/source/api/
+
+/docs/source/screenshots/
+/docs/source/README.md

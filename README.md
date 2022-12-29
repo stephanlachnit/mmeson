@@ -1,17 +1,18 @@
 <!---
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
-# SPDX-License-Identifier: EUPL-1.2
+# SPDX-License-Identifier: CC-BY-SA-4.0
 --->
 
 # mmeson
 
 TUI to configure Meson projects similar to `ccmake` for CMake projects
 
-![](./docs/screenshot.png)
+![](screenshots/screenshot.png)
 
 ## Installation
 
-Install via pip:
+### Via pip
+
 ```sh
 pip install mmeson
 ```
@@ -44,9 +45,9 @@ Note that this will happen automatically though when you run `meson compile`.
 - Code documentation
 - Short user documentation
 
-## License:
+## License
 
-EUPL-1.2
+[EUPL-1.2](https://spdx.org/licenses/EUPL-1.2)
 
 ## Notable mentions
 
