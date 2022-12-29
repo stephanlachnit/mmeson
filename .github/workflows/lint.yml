@@ -8,6 +8,9 @@ on:
       - main
   pull_request:
 
+env:
+  DEPENDENCIES: "uwrid"
+
 jobs:
   flake8:
     name: Lint - flake8
@@ -29,8 +32,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install pylint
-        run: python3 -m pip install pylint
+      - name: Install pylint an dependencies
+        run: python3 -m pip install pylint ${DEPENDENCIES}
       - name: Run pylint
         run: make pylint
   reuse:

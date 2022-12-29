@@ -8,6 +8,11 @@ on:
       - main
   pull_request:
 
+env:
+  DEPENDENCIES: "uwrid"
+  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc"
+  TESTDEPS: "pytest"
+
 jobs:
   dist:
     name: Build wheel
@@ -18,7 +23,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: python3 -m pip install build urwid
+        run: python3 -m pip install build
       - name: Build
         run: make build
   docs:
@@ -30,7 +35,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Sphinx
-        run: python3 -m pip install urwid myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc
+        run: python3 -m pip install ${DOCDEPS} ${DEPENDENCIES}
       - name: Build documentation
         run: make docs
   pytest:
@@ -45,6 +50,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pytest
-        run: python3 -m pip install pytest
+        run: python3 -m pip install ${TESTDEPS} ${DEPENDENCIES}
       - name: Pytest (Python ${{ matrix.python-version }})
         run: make pytest
