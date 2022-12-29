@@ -9,9 +9,14 @@ TUI to configure Meson projects similar to `ccmake` for CMake projects
 
 ![](./docs/screenshot.png)
 
-## Running
+## Installation
 
-Clone the repo and run:
+Install via pip:
+```sh
+pip install mmeson
+```
+
+## Running
 
 ```sh
 python3 -m mmseon path/to/builddir
@@ -34,7 +39,6 @@ exiting `mmeson` with `c`, it combines both of these steps.
 ## ToDo-List
 
 - Proper argparse configuration (w/ user-selectable meson binary)
-- Proper build system
 - Testing / CI
 - Code documentation
 - Short user documentation
