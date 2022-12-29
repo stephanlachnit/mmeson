@@ -33,11 +33,11 @@ class MesonMachine(enum.StrEnum):
 # pylint: disable=too-many-instance-attributes,too-many-arguments,too-few-public-methods
 class Option():
     def __init__(self,
-                 name: str, value, type: MesonType, description: str, choices: list[str],
+                 name: str, value, value_type: MesonType, description: str, choices: list[str],
                  section: MesonSection, machine: MesonMachine):
         self.name = name
         self.value = value
-        self.type = type
+        self.type = value_type
         self.description = description
         self.choices = choices
         self.section = section

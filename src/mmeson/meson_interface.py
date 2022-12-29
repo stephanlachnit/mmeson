@@ -40,12 +40,12 @@ class MesonManager(metaclass=Singleton):
         for entry in intro_dict:
             name = entry['name']
             value = entry['value']
-            type = MesonType(entry['type'])
+            value_type = MesonType(entry['type'])
             description = entry['description'] if 'description' in entry else None
             choices = entry['choices'] if 'choices' in entry else None
             section = MesonSection(entry['section'])
             machine = MesonMachine(entry['machine'])
-            options.append(Option(name, value, type, description, choices, section, machine))
+            options.append(Option(name, value, value_type, description, choices, section, machine))
         return options
 
     def parse_projectinfo(self) -> tuple[str, str]:
