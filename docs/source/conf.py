@@ -58,6 +58,13 @@ html_theme = 'sphinx_rtd_theme'
 # sphinx.ext.autosectionlabel settings
 autosectionlabel_prefix_document = True
 
+# sphinx.ext.autodoc settings
+autodoc_default_options = {
+    "members": True,
+    'member-order': 'bysource',
+    "undoc-members": True,
+}
+
 # sphinx.ext.intersphinx settings
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),

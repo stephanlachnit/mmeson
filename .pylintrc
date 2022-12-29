@@ -4,9 +4,6 @@
 [master]
 fail-under = 10.0
 
-[messages control]
-disable = missing-function-docstring,missing-module-docstring,missing-class-docstring
-
 [format]
 max-line-length = 119
 indent-after-paren = 4
