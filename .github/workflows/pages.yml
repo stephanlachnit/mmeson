@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Sphinx
-        run: python3 -m pip install myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc
+        run: python3 -m pip urwid install myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc
       - name: Build documentation
         run: make docs
       - name: Upload artifact

@@ -44,6 +44,7 @@ Note that this will happen automatically though when you run `meson compile`.
 - Unit tests
 - Code documentation
 - Short user documentation
+- Extract dependencies in CI from [`pyproject.toml`](pyproject.toml)
 
 ## License
 
