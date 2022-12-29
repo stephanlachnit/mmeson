@@ -59,8 +59,12 @@ html_theme = 'sphinx_rtd_theme'
 autosectionlabel_prefix_document = True
 
 # sphinx.ext.intersphinx settings
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'urwid': ('http://urwid.org/', None),
+}
 
 # sphinxcontrib.apidoc settings
 apidoc_module_dir = moduledir.as_posix()
 apidoc_separate_modules = True
+apidoc_extra_args = ['--ext-intersphinx']  # urwid refs still don,t work

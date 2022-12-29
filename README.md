@@ -44,11 +44,12 @@ Note that this will happen automatically though when you run `meson compile`.
 - Unit tests
 - Code documentation
 - Short user documentation
-- Extract dependencies in CI from [`pyproject.toml`](pyproject.toml)
+- Extract dependencies in CI from pyproject.toml
 
 ## License
 
-[EUPL-1.2](https://spdx.org/licenses/EUPL-1.2)
+- Code: [EUPL-1.2](https://spdx.org/licenses/EUPL-1.2)
+- Documentation: [CC-BY-SA-4.0](https://spdx.org/licenses/CC-BY-SA-4.0)
 
 ## Notable mentions
 

@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: CC0-1.0
 
 """
-Legacy setup.py script (run `./setup.py egg_info` to only generate egg_info)
+Setuptools script for additional targets.
+E.g. run `./setup.py egg_info` to only generate egg_info.
 """
 
 from setuptools import setup

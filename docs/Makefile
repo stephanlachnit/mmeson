@@ -16,8 +16,8 @@ help:
 clean:
 	python3 -Bc "import shutil; shutil.rmtree('build', ignore_errors=True)"
 	python3 -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'api'), ignore_errors=True)"
-	python3 -Bc "import shutil; shutil.rmtree('README.md', ignore_errors=True)"
-	python3 -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'screnshots'), ignore_errors=True)"
+	python3 -Bc "import pathlib; pathlib.Path('source', 'README.md').unlink(missing_ok=True)"
+	python3 -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'screenshots'), ignore_errors=True)"
 
 .PHONY: Makefile
 %: Makefile
