@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
 # SPDX-License-Identifier: CC0-1.0
 
-name: Deploy sphinx documentation to Pages
-
+name: Deploy documentation
 on:
   push:
     branches: ["main"]
@@ -36,7 +35,7 @@ jobs:
           python-version: '3.11'
       - name: Install Sphinx
         run: python3 -m pip install myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc
-      - name: Make docs
+      - name: Build documentation
         run: make docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

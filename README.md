@@ -41,7 +41,7 @@ Note that this will happen automatically though when you run `meson compile`.
 ## ToDo-List
 
 - Proper argparse configuration (w/ user-selectable meson binary)
-- Testing / CI
+- Unit tests
 - Code documentation
 - Short user documentation
 
