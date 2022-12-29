@@ -9,7 +9,7 @@ on:
   pull_request:
 
 env:
-  DEPENDENCIES: "uwrid"
+  DEPENDENCIES: "urwid"
 
 jobs:
   flake8:

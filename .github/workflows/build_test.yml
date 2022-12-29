@@ -9,7 +9,7 @@ on:
   pull_request:
 
 env:
-  DEPENDENCIES: "uwrid"
+  DEPENDENCIES: "urwid"
   DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc"
   TESTDEPS: "pytest"
 

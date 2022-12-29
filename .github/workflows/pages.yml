@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DEPENDENCIES: "uwrid"
+  DEPENDENCIES: "urwid"
   DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc"
 
 jobs:
