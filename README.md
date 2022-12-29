@@ -29,7 +29,8 @@ boolean or combo). Press `c` to configure and exit and `q` to exit without confi
 
 Note: you can always set options via `meson configure path/to/builddir -Doption=value` in addition to `mmeson`. This
 does not reconfigure the project though, this needs to be done via `meson setup --reconfigure path/to/builddir`. When
-exiting `mmeson` with `c`, it combines both of these steps.
+exiting `mmeson` with `c`, it combines both of these steps, while exiting with `g` does not reconfigure the project.
+Note that this will happen automatically though when you run `meson compile`.
 
 ## Dependencies
 

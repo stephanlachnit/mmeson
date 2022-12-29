@@ -3,6 +3,8 @@
 
 import enum
 
+from .singleton import Singleton
+
 
 class MesonType(enum.StrEnum):
     STRING = 'string'
@@ -60,7 +62,7 @@ class Option():
             return ret
 
 
-class OptionsManager():
+class OptionsManager(metaclass=Singleton):
     def __init__(self):
         self._options = list[Option]()
 
@@ -93,7 +95,3 @@ class OptionsManager():
     def set_modified(self, index: int, value) -> None:
         self._options[index].modified = True
         self._options[index].value = value
-
-
-# global: OptionManager holding all the options
-OPTIONS_MANAGER = OptionsManager()

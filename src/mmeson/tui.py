@@ -5,8 +5,8 @@ from ast import literal_eval
 
 import urwid
 
-from .meson_interface import run_meson_configure
-from .options import Option, MesonType, OPTIONS_MANAGER
+from .meson_interface import MesonManager, ExitAction
+from .options import Option, OptionsManager, MesonType
 
 
 PALETTE = [
@@ -195,8 +195,9 @@ class OptionList(urwid.ListBox):
         urwid.connect_signal(self._walker, 'modified', self.focus_modified_callback)
 
     def _build_option_rows(self) -> list[OptionRow]:
+        option_manager = OptionsManager()
         option_rows = list[OptionRow]()
-        for index, option in enumerate(OPTIONS_MANAGER.get_options()):
+        for index, option in enumerate(option_manager.get_options()):
             option_row = OptionRow(option)
             option_rows.append(option_row)
             urwid.connect_signal(
@@ -210,7 +211,8 @@ class OptionList(urwid.ListBox):
     @staticmethod
     def _entry_modified_callback(option_row: OptionRow, option_index: int) -> None:
         option_row.set_changed()
-        OPTIONS_MANAGER.set_modified(option_index, option_row.get_value())
+        option_manager = OptionsManager()
+        option_manager.set_modified(option_index, option_row.get_value())
 
 
 class Header(urwid.Text):
@@ -223,12 +225,13 @@ class Footer(urwid.Pile):
     def __init__(self):
         divider = urwid.Divider()
         self.text_info = urwid.Text('\n\n', wrap=urwid.CLIP)
-        text_help_str = 'Keys: [enter] Edit entry [c] Configure and quit [q] Quit without configuring'
+        text_help_str = 'Keys: [enter] Edit entry [c] Reconfigure [g] Configure [q] Quit'
         text_help = urwid.Text(text_help_str, wrap=urwid.CLIP)
         super().__init__([divider, self.text_info, text_help])
 
     def option_list_callback(self, option_index: int):
-        option = OPTIONS_MANAGER.get_option(option_index)
+        options_manager = OptionsManager()
+        option = options_manager.get_option(option_index)
         choices_str = ''
         if option.choices is not None:
             choices_str = 'Choices:'
@@ -249,21 +252,17 @@ def build_ui(project_name: str, project_version: str, meson_version: str):
     return frame
 
 
-# global: configure after exit
-_CONFIGURE_AFTER_EXIT = False
-
-
-def configure_and_exit():
-    global _CONFIGURE_AFTER_EXIT
-    _CONFIGURE_AFTER_EXIT = True
-    raise urwid.ExitMainLoop()
-
-
 def global_key_handler(key: str):
+    meson_manager = MesonManager()
     if key in ('q', 'Q'):
+        meson_manager.set_exit_action(ExitAction.NOTHING)
         raise urwid.ExitMainLoop()
     if key in ('c', 'C'):
-        configure_and_exit()
+        meson_manager.set_exit_action(ExitAction.RECONFIGURE)
+        raise urwid.ExitMainLoop()
+    if key in ('g', 'G'):
+        meson_manager.set_exit_action(ExitAction.ONLY_CONFIGURE)
+        raise urwid.ExitMainLoop()
 
 
 def main_loop(top_level_widget: urwid.Widget):
@@ -272,5 +271,5 @@ def main_loop(top_level_widget: urwid.Widget):
         loop.run()
     except KeyboardInterrupt:
         urwid.ExitMainLoop()
-    if _CONFIGURE_AFTER_EXIT:
-        run_meson_configure()
+    meson_manager = MesonManager()
+    meson_manager.run_exit_action()
