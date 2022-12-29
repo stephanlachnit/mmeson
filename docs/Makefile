@@ -1,24 +1,21 @@
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
 # SPDX-License-Identifier: EUPL-1.2
 
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
+PYTHON ?= python3
 
 export PYTHONPATH=../src/
 
 .PHONY: help
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@$(PYTHON) -m sphinx -M help source build $(O)
 
 .PHONY: clean
 clean:
-	python3 -Bc "import shutil; shutil.rmtree('build', ignore_errors=True)"
-	python3 -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'api'), ignore_errors=True)"
-	python3 -Bc "import pathlib; pathlib.Path('source', 'README.md').unlink(missing_ok=True)"
-	python3 -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'screenshots'), ignore_errors=True)"
+	@$(PYTHON) -Bc "import shutil; shutil.rmtree('build', ignore_errors=True)"
+	@$(PYTHON) -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'api'), ignore_errors=True)"
+	@$(PYTHON) -Bc "import pathlib; pathlib.Path('source', 'README.md').unlink(missing_ok=True)"
+	@$(PYTHON) -Bc "import shutil, os.path; shutil.rmtree(os.path.join('source', 'screenshots'), ignore_errors=True)"
 
 .PHONY: Makefile
 %: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@$(PYTHON) -m sphinx -M $@ source build $(O)

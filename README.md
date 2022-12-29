@@ -5,6 +5,9 @@
 
 # mmeson
 
+[![REUSE status](https://api.reuse.software/badge/github.com/stephanlachnit/mmeson)](https://api.reuse.software/info/github.com/stephanlachnit/mmeson)
+[![CI status](https://github.com/stephanlachnit/mmeson/actions/workflows/build_test.yml/badge.svg)](https://github.com/stephanlachnit/mmeson/actions/workflows/build_test.yml)
+
 TUI to configure Meson projects similar to `ccmake` for CMake projects
 
 ![](screenshots/screenshot.png)

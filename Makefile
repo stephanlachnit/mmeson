@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
 # SPDX-License-Identifier: EUPL-1.2
 
+PYTHON ?= python3
+
 .PHONY: default
 default: egg_info
 
@@ -8,7 +10,7 @@ default: egg_info
 
 .PHONY: egg_info
 egg_info:
-	python3 setup.py egg_info
+	@$(PYTHON) setup.py egg_info
 
 .PHONY: docs
 docs: egg_info
@@ -16,7 +18,7 @@ docs: egg_info
 
 .PHONY: build
 build:
-	python3 -m build
+	@$(PYTHON) -m build
 
 ## lint targets
 
@@ -25,15 +27,15 @@ lint: flake8 pylint reuse
 
 .PHONY: flake8
 flake8:
-	python3 -m flake8 src/mmeson setup.py docs/source/conf.py
+	@$(PYTHON) -m flake8 src/mmeson tests setup.py docs/source/conf.py
 
 .PHONY: pylint
 pylint:
-	python3 -m pylint src/mmeson setup.py docs/source/conf.py
+	@$(PYTHON) -m pylint src/mmeson tests setup.py docs/source/conf.py
 
 .PHONY: reuse
 reuse:
-	python3 -m reuse lint
+	@$(PYTHON) -m reuse lint
 
 ## test targets
 
@@ -42,15 +44,15 @@ test: pytest
 
 .PHONY: pytest
 pytest: egg_info
-	python3 -m pytest
+	@$(PYTHON) -m pytest
 
 ## misc tagets
 
 .PHONY: clean
 clean:
-	python3 -Bc "import pathlib, shutil; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('__pycache__')]"
-	python3 -Bc "import pathlib, shutil; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('*.egg-info')]"
-	python3 -Bc "import shutil; shutil.rmtree('.pytest_cache', ignore_errors=True)"
-	python3 -Bc "import shutil; shutil.rmtree('build', ignore_errors=True)"
-	python3 -Bc "import shutil; shutil.rmtree('dist', ignore_errors=True)"
+	@$(PYTHON) -Bc "import pathlib, shutil; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('__pycache__')]"
+	@$(PYTHON) -Bc "import pathlib, shutil; [shutil.rmtree(p) for p in pathlib.Path('.').rglob('*.egg-info')]"
+	@$(PYTHON) -Bc "import shutil; shutil.rmtree('.pytest_cache', ignore_errors=True)"
+	@$(PYTHON) -Bc "import shutil; shutil.rmtree('build', ignore_errors=True)"
+	@$(PYTHON) -Bc "import shutil; shutil.rmtree('dist', ignore_errors=True)"
 	make -C docs clean

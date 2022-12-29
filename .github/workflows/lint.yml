@@ -13,7 +13,7 @@ env:
 
 jobs:
   flake8:
-    name: Lint - flake8
+    name: flake8
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
       - name: Run flake8
         run: make flake8
   pylint:
-    name: Lint - pylint
+    name: pylint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,7 +37,7 @@ jobs:
       - name: Run pylint
         run: make pylint
   reuse:
-    name: Lint - REUSE
+    name: REUSE
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
