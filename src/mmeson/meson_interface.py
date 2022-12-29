@@ -26,7 +26,7 @@ class ExitAction(enum.StrEnum):
     """Exit without saving the changed config values."""
 
     RECONFIGURE = 'reconfigure'
-    """Same as :obj:`ONLY_CONFIGURE` but calls ``meson setup --reconfigure`` afterwards."""
+    """Same as :attr:`ONLY_CONFIGURE` but calls ``meson setup --reconfigure`` afterwards."""
 
 
 class MesonManager(metaclass=Singleton):
