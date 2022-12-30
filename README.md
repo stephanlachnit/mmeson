@@ -41,12 +41,20 @@ Note that this will happen automatically though when you run `meson compile`.
 - Python3 >=3.11
 - [`urwid`](https://github.com/urwid/urwid)
 
+## Contributing
+
+Contributions are welcome, the code is well documented, especially the TUI part. You can find documentation of the
+internal function and classes [here](https://stephanlachnit.github.io/mmeson/api/mmeson.html).
+
 ## ToDo-List
 
-- Proper argparse configuration (w/ user-selectable meson binary)
-- Unit tests
-- Short user documentation
+- Proper argparse configuration with user-selectable meson binary
+- Unit tests and coverage report
 - Extract dependencies in CI from pyproject.toml
+- More elaborate error handling (e.g. array with choices)
+- Check and return return-value of Meson commands
+- Fix workaround for colored output
+- Check feasibility of [`sphinx-argparse`](https://pypi.org/project/sphinx-argparse/)
 
 ## License
 
