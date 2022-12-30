@@ -23,7 +23,7 @@ pip install mmeson
 ## Running
 
 ```sh
-python3 -m mmseon path/to/builddir
+python3 -m mmeson path/to/builddir
 ```
 
 It is not need to run it in the project's source folder, however you need to setup the project beforehand.
