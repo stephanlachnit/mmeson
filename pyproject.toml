@@ -26,6 +26,7 @@ classifiers = [
 keywords = ["meson", "ccmake"]
 
 [project.urls]
+"Documentation" = "https://stephanlachnit.github.io/mmeson/"
 "Source" = "https://github.com/stephanlachnit/mmeson"
 "Bug Tracker" = "https://github.com/stephanlachnit/mmeson/issues"
 
