@@ -37,20 +37,22 @@ PALETTE = [
     ('integer', 'light magenta', ''),
     ('array', 'brown', ''),
 ]
+"""Color Palette, see `urwid's manual`__ for details.
+
+.. __: http://urwid.org/manual/displaymodules.html#setting-a-palette"""
 
 
 class MesonEdit(urwid.AttrMap):
     """
     Virtual widget class for editing option values.
 
-    Attributs:
-        signals: :obj:`list` of :mod:`urwid` signal names the class can emit.
-
     Args:
         widget: :class:`urwid.Widget` to
-        attr_map: :obj:`str` or :obj:`str` for :class:`urwid.AttrMap`. Workaround to change the color of the widget.
+        attr_map: :obj:`dict` or :obj:`str` for :class:`urwid.AttrMap`. Workaround to change the color of the widget.
     """
+
     signals = ['changed']
+    """:obj:`list` of :mod:`urwid` signal names the class can emit."""
 
     def __init__(self, widget: urwid.Widget, attr_map: dict | str):
         super().__init__(widget, attr_map)
@@ -63,16 +65,44 @@ class MesonEdit(urwid.AttrMap):
 
 
 class StringEdit(MesonEdit):
+    """
+    :class:`MesonEdit` widget to modify :class:`~.Option` of type :attr:`~.MesonType.STRING`.
+    Uses :class:`urwid.Edit` as base.
+
+    Args:
+        value: Initial value of the widget.
+        attr_map: Text color from :obj:`~.PALETTE`, mainly for :class:`ArrayEdit`.
+
+    Attributes:
+        activated: :obj:`bool` that control whether input is used for editing or not. See :func:`keypress`.
+    """
     def __init__(self, value: str, attr_map='string'):
         self.activated = False
         widget = urwid.Edit('', value, multiline=False, edit_pos=0, wrap=urwid.CLIP)
         super().__init__(widget, attr_map)
 
     def get_value(self) -> str:
+        """
+        Returns:
+            Value of the widget as :obj:`str`.
+        """
         return self.original_widget.get_text()[0]
 
     # pylint: disable=inconsistent-return-statements
     def keypress(self, size, key):
+        """
+        Keypress handler for this widget.
+
+        The widget needs to be activated to forward keypresses. This is handled via the :attr:`activated` member, which
+        is toggled when ``enter`` is pressed. If the :attr:`activated` is :obj:`True`, keypresses are forwarded to the
+        containing widget (:class:`urwid.Edit`). Additionally, when the :attr:`activated` member is changed from
+        :obj:`True` to :obj:`False`, a ``changed`` signal is emitted. If :attr:`activated` is :obj:`False`,
+        :paramref:`~keypress.key` is returned. This tells :mod:`urwid` that it is not used by the widget.
+
+        Args:
+            size: unused (given from :mod:`urwid`).
+            key: key name (given from :mod:`urwid`).
+        """
         if key == 'enter':
             self.activated = not self.activated
             edit_pos = len(self.original_widget.get_text()[0]) if self.activated else 0
@@ -87,84 +117,173 @@ class StringEdit(MesonEdit):
 
 
 class BooleanEdit(MesonEdit):
+    """
+    :class:`MesonEdit` widget to modify :class:`~.Option` of type :attr:`~.MesonType.BOOLEAN`.
+    Uses :class:`urwid.SelectableIcon` as base.
+
+    Args:
+        init_state: value for the initial value of :attr:`state`.
+
+    Attributes:
+        state: :obj:`bool` of the current value.
+    """
     def __init__(self, init_state: bool):
-        self._state = init_state
+        self.state = init_state
         widget = urwid.SelectableIcon(repr(init_state))
         super().__init__(widget, repr(init_state).lower())
 
-    def set_state(self, state: bool):
-        if self._state == state:
+    def set_state(self, state: bool) -> None:
+        """
+        Set a new state, change color of the :class:`urwid.AttrMap` and emit a ``changed`` signal.
+
+        Args:
+            state: :obj:`bool` of the new state.
+        """
+        if self.state == state:
             return
-        self._state = state
+        self.state = state
         self.original_widget.set_text(repr(state))
         self.set_attr_map({None: repr(state).lower()})
         urwid.emit_signal(self, 'changed')
 
-    def get_value(self):
-        return self._state
+    def get_value(self) -> bool:
+        """
+        Returns:
+            Value of the widget as :obj:`bool`.
+        """
+        return self.state
 
-    def toggle_state(self):
-        self.set_state(not self._state)
+    def toggle_state(self) -> None:
+        """
+        Toggle the current state.
+        """
+        self.set_state(not self.state)
 
     # pylint: disable=inconsistent-return-statements,unused-argument
     def keypress(self, size, key):
+        """
+        Keypress handler for this widget. Taken from :class:`urwid.CheckBox`.
+
+        Args:
+            size: unused (given from :mod:`urwid`).
+            key: key name (given from :mod:`urwid`).
+        """
         if self._command_map[key] != urwid.ACTIVATE:
             return key
         self.toggle_state()
 
 
 class ComboEdit(MesonEdit):
+    """
+    :class:`MesonEdit` widget to modify :class:`~.Option` of type :attr:`~.MesonType.COMBO`.
+    Uses :class:`urwid.SelectableIcon` as base.
+
+    Args:
+        init_choice: Value used for the initial value of :attr:`choice_index`.
+        choices: List of valid choices.
+
+    Attributes:
+        choice_index: :obj:`int` refering to the index of the currently selected choice.
+        choices: List of valid choices.
+    """
     def __init__(self, init_choice: str, choices: list[str]):
-        self._choice_index = choices.index(init_choice)
-        self._choices = choices
+        self.choice_index = choices.index(init_choice)
+        self.choices = choices
         widget = urwid.SelectableIcon(init_choice)
         super().__init__(widget, self.create_attr_map(init_choice))
 
-    @staticmethod
-    def create_attr_map(choice: str):
-        if choice in ['enabled', 'disabled', 'true', 'false']:
+    def create_attr_map(self, choice: str) -> dict:
+        """
+        Creates an attribute map for the widget. Workaround to adjust the color of the widget depending on the choice.
+        For ``enabled``, ``true``, ``disabled`` and ``false`` the color is defined in :obj:`PALETTE`, for other choices
+        use the ``choice`` color defined in :obj:`PALETTE`.
+
+        Args:
+            choice: choice to return color / attribute :obj:`dict` for.
+
+        Returns:
+            :obj:`dict` formatted as ``{None: 'color_name'}``.
+        """
+        if choice in ['enabled', 'true', 'disabled', 'false']:
             return {None: choice}
         return {None: 'choice'}
 
-    def set_choice(self, choice_index: int):
-        if self._choice_index == choice_index:
+    def set_choice(self, choice_index: int) -> None:
+        """
+        Set a new choice, change color of the :class:`urwid.AttrMap` and emit a ``changed`` signal.
+
+        Args:
+            choice_index: :obj:`int` new choice index for :attr:`choice_index`.
+        """
+        if self.choice_index == choice_index:
             return
-        self._choice_index = choice_index
+        self.choice_index = choice_index
         choice = self.get_choice()
         self.original_widget.set_text(choice)
         self.set_attr_map(self.create_attr_map(choice))
         urwid.emit_signal(self, 'changed')
 
     def get_choice(self) -> str:
-        return self._choices[self._choice_index]
+        """
+        Returns:
+            Current selected choice as :obj:`str`.
+        """
+        return self.choices[self.choice_index]
 
     def get_value(self) -> str:
+        """
+        Returns:
+            Value of the widget as :obj:`str`.
+        """
         return self.get_choice()
 
-    def rotate_choice(self):
-        if self._choice_index == len(self._choices) - 1:
+    def rotate_choice(self) -> None:
+        """
+        Select next choice in :attr:`choices` list.
+        """
+        if self.choice_index == len(self.choices) - 1:
             self.set_choice(0)
         else:
-            self.set_choice(self._choice_index + 1)
+            self.set_choice(self.choice_index + 1)
 
     # pylint: disable=inconsistent-return-statements,unused-argument
     def keypress(self, size, key):
+        """
+        Keypress handler for this widget. Same as :func:`BooleanEdit.keypress`.
+        """
         if self._command_map[key] != urwid.ACTIVATE:
             return key
         self.rotate_choice()
 
 
 class IntegerEdit(MesonEdit):
+    """
+    :class:`MesonEdit` widget to modify :class:`~.Option` of type :attr:`~.MesonType.INTEGER`.
+    Uses :class:`urwid.IntEdit` as base.
+
+    Args:
+        value: Initial value of the widget.
+
+    Attributes:
+        activated: See :attr:`StringEdit.activated`.
+    """
     def __init__(self, value: int):
         self.activated = False
         widget = urwid.IntEdit('', value)
         super().__init__(widget, 'integer')
 
     def get_value(self) -> int:
+        """
+        Returns:
+            Value of the widget as :obj:`int`.
+        """
         return self.original_widget.value()
 
     # pylint: disable=inconsistent-return-statements
     def keypress(self, size, key):
+        """
+        Keypress handler for this widget. Similar to :func:`StringEdit.keypress`.
+        """
         if key == 'enter':
             self.activated = not self.activated
             if not self.activated:
@@ -177,10 +296,21 @@ class IntegerEdit(MesonEdit):
 
 
 class ArrayEdit(StringEdit):
+    """
+    :class:`MesonEdit` widget to modify :class:`~.Option` of type :attr:`~.MesonType.ARRAY`.
+    Uses :class:`StringEdit` as base.
+
+    Args:
+        value: Initial value of the widget.
+    """
     def __init__(self, value: list[str]):
         super().__init__(str(value), 'array')
 
     def get_value(self) -> list[str]:
+        """
+        Returns:
+            Value of the widget as :obj:`list` of :obj:`str`.
+        """
         return literal_eval(super().get_value())
 
 
@@ -223,7 +353,7 @@ class OptionRow(urwid.Columns):
         if option.type == MesonType.ARRAY:
             return ArrayEdit(option.value)
 
-    def set_changed(self):
+    def set_changed(self) -> None:
         """
         Adds a ``*`` in front of the option name to indicate the option was changed.
         """
@@ -241,30 +371,53 @@ class OptionRow(urwid.Columns):
 
 
 class OptionList(urwid.ListBox):
+    """
+    Body of the main frame. :class:`urwid.ListBox` containing a :class:`OptionRow` for every :class:`Option`.
+
+    Attributes:
+        option_rows: :obj:`list` of :class:`OptionRow` contained in the widget.
+        walker: :class:`urwid.SimpleFocusListWalker` managing the focusing of the contained widgets.
+    """
+
     signals = ['focus-modified']
+    """:obj:`list` of :mod:`urwid` signal names the class can emit."""
 
     def __init__(self):
-        self._option_rows = self._build_option_rows()
-        self._walker = urwid.SimpleFocusListWalker(self._option_rows)
-        super().__init__(self._walker)
-        urwid.connect_signal(self._walker, 'modified', self.focus_modified_callback)
+        self.option_rows = self.build_option_rows()
+        self.walker = urwid.SimpleFocusListWalker(self.option_rows)
+        super().__init__(self.walker)
+        urwid.connect_signal(self.walker, 'modified', self.focus_modified_callback)
 
-    def _build_option_rows(self) -> list[OptionRow]:
+    def build_option_rows(self) -> list[OptionRow]:
+        """
+        Creates an :class:`OptionRow` for every :class:`~.Option` from the :class:`~.OptionsManager` and connects their
+        ``changed`` signal to :func:`entry_modified_callback` with the widget and index as arguments.
+
+        Returns:
+            :obj:`list` of :class:`OptionRow`.
+        """
         option_manager = OptionsManager()
         option_rows = list[OptionRow]()
         for index, option in enumerate(option_manager.get_options()):
             option_row = OptionRow(option)
             option_rows.append(option_row)
             urwid.connect_signal(
-                option_row.value_widget, 'changed', self._entry_modified_callback, user_args=[option_row, index])
+                option_row.value_widget, 'changed', self.entry_modified_callback, user_args=[option_row, index])
         return option_rows
 
-    def focus_modified_callback(self):
-        option_index = self._walker.get_focus()[1]
+    def focus_modified_callback(self) -> None:
+        """
+        Callback for the ``modified`` signal from :attr:`walker`. Forwards the signal as ``focus-modified`` signal with
+        the index of the currently focused :class:`OptionRow`.
+        """
+        option_index = self.walker.get_focus()[1]
         urwid.emit_signal(self, 'focus-modified', option_index)
 
-    @staticmethod
-    def _entry_modified_callback(option_row: OptionRow, option_index: int) -> None:
+    def entry_modified_callback(self, option_row: OptionRow, option_index: int) -> None:
+        """
+        Callback for the ``changed`` signal from an :class:`OptionRow`. Sets the :class:`~.Option` as modified in the
+        :class:`~.OptionsManager` with the new value via :func:`MesonEdit.get_value`.
+        """
         option_row.set_changed()
         option_manager = OptionsManager()
         option_manager.set_modified(option_index, option_row.get_value())
@@ -302,7 +455,7 @@ class Footer(urwid.Pile):
         text_help = urwid.Text(text_help_str, wrap=urwid.CLIP)
         super().__init__([divider, self.text_info, text_help])
 
-    def option_list_callback(self, option_index: int):
+    def option_list_callback(self, option_index: int) -> None:
         """
         Callback changing the option meta information in the footer.
 
@@ -342,7 +495,7 @@ def build_ui(project_name: str, project_version: str, meson_version: str) -> urw
     return frame
 
 
-def global_key_handler(key: str):
+def global_key_handler(key: str) -> None:
     """
     Global key handler for unhandled key presses.
 
@@ -361,7 +514,7 @@ def global_key_handler(key: str):
         raise urwid.ExitMainLoop()
 
 
-def main_loop(top_level_widget: urwid.Widget):
+def main_loop(top_level_widget: urwid.Widget) -> int:
     """
     Creates and runs the :class:`urwid.MainLoop` object. After the loop exists, it run the :class:`~.ExitAction` from
     the :class:`~.MesonManager`.
@@ -376,3 +529,4 @@ def main_loop(top_level_widget: urwid.Widget):
         urwid.ExitMainLoop()
     meson_manager = MesonManager()
     meson_manager.run_exit_action()
+    return 0

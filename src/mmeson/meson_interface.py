@@ -34,12 +34,12 @@ class MesonManager(metaclass=Singleton):
     Singleton class managing Meson-related parsing and actions.
 
     Attributes:
-        _builddir: :class:`pathlib.Path` containing the builddir (has to be set via :func:`set_builddir`).
-        _exit_action: see :class:`ExitAction` for details.
+        builddir: :class:`pathlib.Path` containing the builddir (has to be set via :func:`set_builddir`).
+        exit_action: see :class:`ExitAction` for details.
     """
     def __init__(self) -> None:
-        self._builddir = pathlib.Path()
-        self._exit_action = ExitAction.NOTHING
+        self.builddir = pathlib.Path()
+        self.exit_action = ExitAction.NOTHING
 
     def set_builddir(self, builddir: pathlib.Path | str):
         """
@@ -48,10 +48,10 @@ class MesonManager(metaclass=Singleton):
         Args:
             builddir: :class:`pathlib.Path` or :class:`str` pointing to the builddir.
         """
-        if self._builddir is not pathlib.Path:
-            self._builddir = pathlib.Path(builddir)
-        if not self._builddir.is_dir():
-            raise Exception(f'{self._builddir.as_posix()} is not a directory')
+        if self.builddir is not pathlib.Path:
+            self.builddir = pathlib.Path(builddir)
+        if not self.builddir.is_dir():
+            raise Exception(f'{self.builddir.as_posix()} is not a directory')
 
     def get_intro_file(self, intro_file: str) -> dict:
         """
@@ -63,7 +63,7 @@ class MesonManager(metaclass=Singleton):
         Returns:
             The dict contained in the introspection file.
         """
-        intro_file_path = pathlib.Path(self._builddir, 'meson-info', intro_file)
+        intro_file_path = pathlib.Path(self.builddir, 'meson-info', intro_file)
         if not intro_file_path.exists():
             raise FileNotFoundError(f'File {intro_file_path.as_posix()} does not exist')
         with open(intro_file_path, mode='rt', encoding='utf-8') as file_io:
@@ -128,9 +128,9 @@ class MesonManager(metaclass=Singleton):
         Args:
             exit_action: see :class:`ExitAction` for details.
         """
-        self._exit_action = exit_action
+        self.exit_action = exit_action
 
-    def run_exit_action(self):
+    def run_exit_action(self) -> None:
         """
         Runs the exit action. For exact behaviour see :class:`ExitAction` for details.
         """
@@ -138,7 +138,7 @@ class MesonManager(metaclass=Singleton):
         modified_options = options_manager.get_modified_options()
         modified_options_count = len(modified_options)
 
-        if self._exit_action == ExitAction.NOTHING:
+        if self.exit_action == ExitAction.NOTHING:
             if modified_options_count != 0:
                 print(f'Ignoring {modified_options_count} changes')
             return
@@ -153,8 +153,8 @@ class MesonManager(metaclass=Singleton):
             config_args.append(f'-D{option.name}={option.value_as_string()}')
 
         cwd = self.parse_meson_workdir()
-        subprocess.run(['meson', 'configure', self._builddir.as_posix()] + config_args, cwd=cwd, check=False)
+        subprocess.run(['meson', 'configure', self.builddir.as_posix()] + config_args, cwd=cwd, check=False)
 
-        if self._exit_action == ExitAction.RECONFIGURE:
+        if self.exit_action == ExitAction.RECONFIGURE:
             print('Reconfiguring project')
-            subprocess.run(['meson', 'setup', '--reconfigure', self._builddir.as_posix()], cwd=cwd, check=False)
+            subprocess.run(['meson', 'setup', '--reconfigure', self.builddir.as_posix()], cwd=cwd, check=False)

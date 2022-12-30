@@ -10,7 +10,7 @@ on:
 
 env:
   DEPENDENCIES: "urwid"
-  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc"
+  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc sphinx_paramlinks"
   TESTDEPS: "pytest"
 
 jobs:

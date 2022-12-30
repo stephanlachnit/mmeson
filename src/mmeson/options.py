@@ -97,19 +97,23 @@ class OptionsManager(metaclass=Singleton):
     Singleton class owning the list of all options.
 
     Attributes:
-        _options: :obj:`list` of :class:`Option` list of all current options.
+        options: :obj:`list` of :class:`Option` list of all current options.
     """
     def __init__(self):
-        self._options = list[Option]()
+        self.options = list[Option]()
 
-    def set_options(self, options: list[Option]):
+    def set_options(self, options: list[Option]) -> None:
         """
         Sets the :attr:`_options` member and sorts it.
 
         Args:
             options: List of options to use for :attr:`_options` member.
         """
-        def sorter(option: Option):
+        def sorter(option: Option) -> tuple[str, int, str]:
+            """
+            Sorting with highest priority to subproject name, then the section with a custom ordering and only then the
+            name of the option.
+            """
             section_map = {
                 MesonSection.USER: 1,
                 MesonSection.BASE: 2,
@@ -123,14 +127,14 @@ class OptionsManager(metaclass=Singleton):
             subproject = '' if len(splitted) == 1 else splitted[0]
             option_name = splitted[0] if len(splitted) == 1 else splitted[1]
             return (subproject, section_map[option.section], option_name)
-        self._options = sorted(options, key=sorter)
+        self.options = sorted(options, key=sorter)
 
     def get_options(self) -> list[Option]:
         """
         Returns:
             List of all options.
         """
-        return self._options
+        return self.options
 
     def get_option(self, index: int) -> Option:
         """
@@ -140,16 +144,16 @@ class OptionsManager(metaclass=Singleton):
         Returns:
             :class:`Option` from the :attr:`_options` list.
         """
-        return self._options[index]
+        return self.options[index]
 
     def get_modified_options(self) -> list[Option]:
         """
         Returns:
             List of all modified options.
         """
-        return list(filter(lambda option: option.modified, self._options))
+        return list(filter(lambda option: option.modified, self.options))
 
-    def set_modified(self, index: int, value):
+    def set_modified(self, index: int, value) -> None:
         """
         Modify an option and mark it as modified.
 
@@ -157,5 +161,5 @@ class OptionsManager(metaclass=Singleton):
             index: index of the option in the :attr:`_options` list.
             value: value to set according to the option's :class:`MesonType`.
         """
-        self._options[index].modified = True
-        self._options[index].value = value
+        self.options[index].modified = True
+        self.options[index].value = value

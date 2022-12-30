@@ -33,5 +33,5 @@ keywords = ["meson", "ccmake"]
 mmeson = "mmeson.cli:main"
 
 [project.optional-dependencies]
-docs = ["sphinx", "sphinx_rtd_theme", "myst-parser", "sphinxcontrib.apidoc"]
+docs = ["sphinx", "sphinx_rtd_theme", "myst-parser", "sphinxcontrib.apidoc", "sphinx_paramlinks"]
 test = ["pytest"]

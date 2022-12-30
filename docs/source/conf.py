@@ -44,6 +44,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinxcontrib.apidoc',
+    'sphinx_paramlinks',
 ]
 
 # general settings

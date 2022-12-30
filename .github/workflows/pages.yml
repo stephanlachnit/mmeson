@@ -20,7 +20,7 @@ concurrency:
 
 env:
   DEPENDENCIES: "urwid"
-  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc"
+  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc sphinx_paramlinks"
 
 jobs:
   # Single deploy job since we're just deploying

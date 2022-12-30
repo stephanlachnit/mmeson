@@ -45,7 +45,6 @@ Note that this will happen automatically though when you run `meson compile`.
 
 - Proper argparse configuration (w/ user-selectable meson binary)
 - Unit tests
-- Code documentation
 - Short user documentation
 - Extract dependencies in CI from pyproject.toml
 
