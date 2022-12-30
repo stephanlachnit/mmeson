@@ -104,10 +104,10 @@ class OptionsManager(metaclass=Singleton):
 
     def set_options(self, options: list[Option]) -> None:
         """
-        Sets the :attr:`_options` member and sorts it.
+        Sets the :attr:`options` member and sorts it.
 
         Args:
-            options: List of options to use for :attr:`_options` member.
+            options: List of options to use for :attr:`options` member.
         """
         def sorter(option: Option) -> tuple[str, int, str]:
             """
@@ -139,10 +139,10 @@ class OptionsManager(metaclass=Singleton):
     def get_option(self, index: int) -> Option:
         """
         Args:
-            index: index of the option in the :attr:`_options` list.
+            index: index of the option in the :attr:`options` list.
 
         Returns:
-            :class:`Option` from the :attr:`_options` list.
+            :class:`Option` from the :attr:`options` list.
         """
         return self.options[index]
 
@@ -158,7 +158,7 @@ class OptionsManager(metaclass=Singleton):
         Modify an option and mark it as modified.
 
         Args:
-            index: index of the option in the :attr:`_options` list.
+            index: index of the option in the :attr:`options` list.
             value: value to set according to the option's :class:`MesonType`.
         """
         self.options[index].modified = True
