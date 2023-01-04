@@ -306,6 +306,9 @@ class ArrayEdit(StringEdit):
     def __init__(self, value: list[str]):
         super().__init__(str(value), 'array')
 
+    # IDEA: custom widget to only edit single array entries
+    # `e` to add array entry, `d` to delete entry, `tab` to cycle between entries, `enter` to edit single entry
+
     def get_value(self) -> list[str]:
         """
         Returns:

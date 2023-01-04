@@ -48,6 +48,9 @@ internal function and classes [here](https://stephanlachnit.github.io/mmeson/api
 
 ## ToDo-List
 
+- Custom Widget for array editing (instead of writing string only edit array entries)
+- Search function for build option
+- Path completion via `TAB` when editing strings / arrays
 - Unit tests and coverage report
 - Extract dependencies in CI from pyproject.toml
 - More elaborate error handling (e.g. array with choices)
