@@ -39,6 +39,7 @@ class MesonManager(metaclass=Singleton):
     """
     def __init__(self) -> None:
         self.builddir = pathlib.Path()
+        self.meson_bin = str()
         self.exit_action = ExitAction.NOTHING
 
     def set_builddir(self, builddir: pathlib.Path | str):
@@ -52,6 +53,15 @@ class MesonManager(metaclass=Singleton):
             self.builddir = pathlib.Path(builddir)
         if not self.builddir.is_dir():
             raise Exception(f'{self.builddir.as_posix()} is not a directory')
+
+    def set_meson_bin(self, meson_bin: str):
+        """
+        Sets the Meson binary to use.
+
+        Args:
+            meson_bin: Name of the Meson binary in ``PATH`` or path to Meson binary as :obj:`str`.
+        """
+        self.meson_bin = meson_bin
 
     def get_intro_file(self, intro_file: str) -> dict:
         """
@@ -153,8 +163,8 @@ class MesonManager(metaclass=Singleton):
             config_args.append(f'-D{option.name}={option.value_as_string()}')
 
         cwd = self.parse_meson_workdir()
-        subprocess.run(['meson', 'configure', self.builddir.as_posix()] + config_args, cwd=cwd, check=False)
+        subprocess.run([self.meson_bin, 'configure', self.builddir.as_posix()] + config_args, cwd=cwd, check=False)
 
         if self.exit_action == ExitAction.RECONFIGURE:
             print('Reconfiguring project')
-            subprocess.run(['meson', 'setup', '--reconfigure', self.builddir.as_posix()], cwd=cwd, check=False)
+            subprocess.run([self.meson_bin, 'setup', '--reconfigure', self.builddir.as_posix()], cwd=cwd, check=False)

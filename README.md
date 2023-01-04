@@ -48,7 +48,6 @@ internal function and classes [here](https://stephanlachnit.github.io/mmeson/api
 
 ## ToDo-List
 
-- Proper argparse configuration with user-selectable meson binary
 - Unit tests and coverage report
 - Extract dependencies in CI from pyproject.toml
 - More elaborate error handling (e.g. array with choices)
