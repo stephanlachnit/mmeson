@@ -8,9 +8,6 @@ on:
       - main
   pull_request:
 
-env:
-  DEPENDENCIES: "urwid"
-
 jobs:
   flake8:
     name: flake8
@@ -33,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install pylint an dependencies
-        run: python3 -m pip install pylint ${DEPENDENCIES}
+        run: python3 -m pip install pylint .
       - name: Run pylint
         run: make pylint
   reuse:

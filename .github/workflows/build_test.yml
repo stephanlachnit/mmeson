@@ -1,17 +1,12 @@
 # SPDX-FileCopyrightText: 2022 Stephan Lachnit <stephanlachnit@debian.org>
 # SPDX-License-Identifier: CC0-1.0
 
-name: Build and test
+name: Test
 on:
   push:
     branches:
       - main
   pull_request:
-
-env:
-  DEPENDENCIES: "urwid"
-  DOCDEPS: "myst-parser sphinx sphinx_rtd_theme sphinxcontrib.apidoc sphinx_paramlinks"
-  TESTDEPS: "pytest"
 
 jobs:
   dist:
@@ -35,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install Sphinx
-        run: python3 -m pip install ${DOCDEPS} ${DEPENDENCIES}
+        run: python3 -m pip install .[docs]
       - name: Build documentation
         run: make docs
   pytest:
@@ -50,6 +45,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pytest
-        run: python3 -m pip install ${TESTDEPS} ${DEPENDENCIES}
+        run: python3 -m pip install .[test]
       - name: Pytest (Python ${{ matrix.python-version }})
         run: make pytest
