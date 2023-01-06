@@ -35,6 +35,7 @@ class MesonManager(metaclass=Singleton):
 
     Attributes:
         builddir: :class:`pathlib.Path` containing the builddir (has to be set via :func:`set_builddir`).
+        meson_bin: :obj:`str` pointing to the Meson binary (has to be set via :func:`set_meson_bin`).
         exit_action: see :class:`ExitAction` for details.
     """
     def __init__(self) -> None:
