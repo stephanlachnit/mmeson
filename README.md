@@ -55,7 +55,6 @@ internal function and classes [here](https://stephanlachnit.github.io/mmeson/api
 - Extract dependencies in CI from pyproject.toml
 - More elaborate error handling (e.g. array with choices)
 - Fix workaround for colored output
-- Check feasibility of [`sphinx-argparse`](https://pypi.org/project/sphinx-argparse/)
 
 ## License
 
