@@ -74,7 +74,7 @@ class StringEdit(MesonEdit):
         attr_map: Text color from :obj:`~.PALETTE`, mainly for :class:`ArrayEdit`.
 
     Attributes:
-        activated: :obj:`bool` that control whether input is used for editing or not. See :func:`keypress`.
+        activated: :obj:`bool` that control whether input is used for editing or not. See :func:`keypress()`.
     """
     def __init__(self, value: str, attr_map='string'):
         self.activated = False
@@ -249,7 +249,7 @@ class ComboEdit(MesonEdit):
     # pylint: disable=inconsistent-return-statements,unused-argument
     def keypress(self, size, key):
         """
-        Keypress handler for this widget. Same as :func:`BooleanEdit.keypress`.
+        Keypress handler for this widget. Same as :func:`BooleanEdit.keypress()`.
         """
         if self._command_map[key] != urwid.ACTIVATE:
             return key
@@ -282,7 +282,7 @@ class IntegerEdit(MesonEdit):
     # pylint: disable=inconsistent-return-statements
     def keypress(self, size, key):
         """
-        Keypress handler for this widget. Similar to :func:`StringEdit.keypress`.
+        Keypress handler for this widget. Similar to :func:`StringEdit.keypress()`.
         """
         if key == 'enter':
             self.activated = not self.activated
@@ -326,7 +326,7 @@ class OptionRow(urwid.Columns):
         option: :class:`~.Option` to build the widget for.
 
     Attributes:
-        changed: :obj:`bool` that will be set to :obj:`True` in :func:`set_changed`.
+        changed: :obj:`bool` that will be set to :obj:`True` in :func:`set_changed()`.
         name_widget: :class:`urwid.Text` containing the option name on the left.
         value_widget: :class:`MesonEdit` for changing the option value on the right.
     """
@@ -394,7 +394,7 @@ class OptionList(urwid.ListBox):
     def build_option_rows(self) -> list[OptionRow]:
         """
         Creates an :class:`OptionRow` for every :class:`~.Option` from the :class:`~.OptionsManager` and connects their
-        ``changed`` signal to :func:`entry_modified_callback` with the widget and index as arguments.
+        ``changed`` signal to :func:`entry_modified_callback()` with the widget and index as arguments.
 
         Returns:
             :obj:`list` of :class:`OptionRow`.
@@ -419,7 +419,7 @@ class OptionList(urwid.ListBox):
     def entry_modified_callback(self, option_row: OptionRow, option_index: int) -> None:
         """
         Callback for the ``changed`` signal from an :class:`OptionRow`. Sets the :class:`~.Option` as modified in the
-        :class:`~.OptionsManager` with the new value via :func:`MesonEdit.get_value`.
+        :class:`~.OptionsManager` with the new value via :func:`MesonEdit.get_value()`.
         """
         option_row.set_changed()
         option_manager = OptionsManager()
@@ -449,7 +449,7 @@ class Footer(urwid.Pile):
     available.
 
     Attributes:
-        text_info: :class:`urwid.Text` containing the option meta info (see :func:`option_list_callback`).
+        text_info: :class:`urwid.Text` containing the option meta info (see :func:`option_list_callback()`).
     """
     def __init__(self):
         divider = urwid.Divider()

@@ -34,8 +34,8 @@ class MesonManager(metaclass=Singleton):
     Singleton class managing Meson-related parsing and actions.
 
     Attributes:
-        builddir: :class:`pathlib.Path` containing the builddir (has to be set via :func:`set_builddir`).
-        meson_bin: :obj:`str` pointing to the Meson binary (has to be set via :func:`set_meson_bin`).
+        builddir: :class:`pathlib.Path` containing the builddir (has to be set via :func:`set_builddir()`).
+        meson_bin: :obj:`str` pointing to the Meson binary (has to be set via :func:`set_meson_bin()`).
         exit_action: see :class:`ExitAction` for details.
     """
     def __init__(self) -> None:
@@ -134,7 +134,7 @@ class MesonManager(metaclass=Singleton):
 
     def set_exit_action(self, exit_action: ExitAction):
         """
-        Sets the action to be done when :func:`run_exit_action` is called.
+        Sets the action to be done when :func:`run_exit_action()` is called.
 
         Args:
             exit_action: see :class:`ExitAction` for details.
