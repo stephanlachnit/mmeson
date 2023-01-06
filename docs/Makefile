@@ -7,7 +7,7 @@ export PYTHONPATH=../src/
 
 .PHONY: help
 help:
-	@$(PYTHON) -m sphinx -M help source build $(O)
+	@$(PYTHON) -m sphinx -M help source build
 
 .PHONY: clean
 clean:
