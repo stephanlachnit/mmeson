@@ -35,7 +35,7 @@ def parse_args(args: list[str]) -> argparse.Namespace:
     return parser.parse_args(args=args)
 
 
-def main(args: list[str] = None):
+def main(args: list[str] = None) -> int:
     """
     Runs the command-line interface. Arguments must start with the first "real" arg, i.e. without executable.
 
@@ -57,4 +57,6 @@ def main(args: list[str] = None):
     project_name, project_version = meson_manager.parse_projectinfo()
 
     tlw = build_ui(project_name, project_version, meson_version)
-    main_loop(tlw)
+    return_code = main_loop(tlw)
+
+    return return_code
