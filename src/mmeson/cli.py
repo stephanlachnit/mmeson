@@ -6,6 +6,7 @@ Command-line interface module.
 """
 
 import argparse
+import pathlib
 import sys
 
 from . import __version__
@@ -27,7 +28,7 @@ def parse_args(args: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='ccmake-like TUI for Meson projects', prog='mmeson',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('builddir')
+    parser.add_argument('builddir', type=pathlib.Path)
     parser.add_argument('-b', '--bin', default='meson', help='meson binary')
     parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
 
