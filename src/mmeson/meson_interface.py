@@ -132,7 +132,7 @@ class MesonManager(metaclass=Singleton):
         intro_dict = self.get_intro_file('meson-info.json')
         return pathlib.Path(intro_dict['directories']['source'])
 
-    def set_exit_action(self, exit_action: ExitAction):
+    def set_exit_action(self, exit_action: ExitAction) -> None:
         """
         Sets the action to be done when :func:`run_exit_action()` is called.
 
