@@ -141,9 +141,12 @@ class MesonManager(metaclass=Singleton):
         """
         self.exit_action = exit_action
 
-    def run_exit_action(self) -> None:
+    def run_exit_action(self) -> int:
         """
         Runs the exit action. For exact behaviour see :class:`ExitAction` for details.
+
+        Returns:
+            Return code from the last Meson call or ``0`` if Meson is never called.
         """
         options_manager = OptionsManager()
         modified_options = options_manager.get_modified_options()
@@ -152,11 +155,11 @@ class MesonManager(metaclass=Singleton):
         if self.exit_action == ExitAction.NOTHING:
             if modified_options_count != 0:
                 print(f'Ignoring {modified_options_count} changes')
-            return
+            return 0
 
         if modified_options_count == 0:
             print('Nothing to configure!')
-            return
+            return 0
 
         print(f'Configuring {modified_options_count} changes')
         config_args = list[str]()
@@ -164,8 +167,17 @@ class MesonManager(metaclass=Singleton):
             config_args.append(f'-D{option.name}={option.value_as_string()}')
 
         cwd = self.parse_meson_workdir()
-        subprocess.run([self.meson_bin, 'configure', self.builddir.as_posix()] + config_args, cwd=cwd, check=False)
+        meson_configure_args = [self.meson_bin, 'configure', self.builddir.as_posix()] + config_args
+        meson_configure_proc = subprocess.run(meson_configure_args, cwd=cwd, check=False)
 
-        if self.exit_action == ExitAction.RECONFIGURE:
-            print('Reconfiguring project')
-            subprocess.run([self.meson_bin, 'setup', '--reconfigure', self.builddir.as_posix()], cwd=cwd, check=False)
+        if self.exit_action == ExitAction.ONLY_CONFIGURE:
+            return meson_configure_proc.returncode
+
+        if meson_configure_proc.returncode != 0:
+            print('Configuration failed, skipping reconfiguration!')
+            return meson_configure_proc.returncode
+
+        print('Reconfiguring project')
+        meson_reconfigure_args = [self.meson_bin, 'setup', '--reconfigure', self.builddir.as_posix()]
+        meson_reconfigure_proc = subprocess.run(meson_reconfigure_args, cwd=cwd, check=False)
+        return meson_reconfigure_proc.returncode

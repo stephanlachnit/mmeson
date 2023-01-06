@@ -54,7 +54,6 @@ internal function and classes [here](https://stephanlachnit.github.io/mmeson/api
 - Unit tests and coverage report
 - Extract dependencies in CI from pyproject.toml
 - More elaborate error handling (e.g. array with choices)
-- Check and return return-value of Meson commands
 - Fix workaround for colored output
 - Check feasibility of [`sphinx-argparse`](https://pypi.org/project/sphinx-argparse/)
 

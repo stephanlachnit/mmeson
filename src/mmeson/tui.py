@@ -524,12 +524,17 @@ def main_loop(top_level_widget: urwid.Widget) -> int:
 
     Args:
         top_level_widget: top-level urwid widget for the :class:`urwid.MainLoop` object.
+
+    Returns:
+        Exit code from :attr:`~.MesonManager.run_exit_action()`.
     """
     loop = urwid.MainLoop(top_level_widget, palette=PALETTE, unhandled_input=global_key_handler, handle_mouse=False)
     try:
         loop.run()
     except KeyboardInterrupt:
         urwid.ExitMainLoop()
+
     meson_manager = MesonManager()
-    meson_manager.run_exit_action()
-    return 0
+    return_code = meson_manager.run_exit_action()
+
+    return return_code
