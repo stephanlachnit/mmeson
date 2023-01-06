@@ -52,7 +52,6 @@ internal function and classes [here](https://stephanlachnit.github.io/mmeson/api
 - Search function for build option
 - Path completion via `TAB` when editing strings / arrays
 - Unit tests and coverage report
-- Extract dependencies in CI from pyproject.toml
 - More elaborate error handling (e.g. array with choices)
 - Fix workaround for colored output
 
