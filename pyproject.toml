@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 name = "mmeson"
 description = "ccmake for Meson projects"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 dependencies = [
     "urwid",
     "setuptools",
@@ -21,6 +21,8 @@ classifiers = [
     "License :: OSI Approved",
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Development Status :: 3 - Alpha",
 ]

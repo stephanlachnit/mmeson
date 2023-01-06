@@ -10,7 +10,7 @@ import enum
 from .singleton import Singleton
 
 
-class MesonType(enum.StrEnum):
+class MesonType(enum.Enum):
     """
     Enum for Meson's option type. See `Meson's manual`__ for details.
 
@@ -23,7 +23,7 @@ class MesonType(enum.StrEnum):
     ARRAY = 'array'
 
 
-class MesonSection(enum.StrEnum):
+class MesonSection(enum.Enum):
     """
     Enum for Meson's option section. See `Meson's manual`__ for details.
 
@@ -38,7 +38,7 @@ class MesonSection(enum.StrEnum):
     TEST = 'test'
 
 
-class MesonMachine(enum.StrEnum):
+class MesonMachine(enum.Enum):
     """
     Enum for Meson's machine entry. See `Meson's manual`__ for details.
 

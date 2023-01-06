@@ -38,7 +38,7 @@ Note that this will happen automatically though when you run `meson compile`.
 
 ## Dependencies
 
-- Python3 >=3.11
+- Python3 >=3.9
 - [`urwid`](https://github.com/urwid/urwid)
 
 ## Contributing

@@ -14,7 +14,7 @@ from .options import Option, OptionsManager, MesonType, MesonSection, MesonMachi
 from .singleton import Singleton
 
 
-class ExitAction(enum.StrEnum):
+class ExitAction(enum.Enum):
     """
     Enum for the exit action. TODO more explaination.
     """
@@ -43,15 +43,14 @@ class MesonManager(metaclass=Singleton):
         self.meson_bin = str()
         self.exit_action = ExitAction.NOTHING
 
-    def set_builddir(self, builddir: pathlib.Path | str):
+    def set_builddir(self, builddir: pathlib.Path):
         """
         Sets the builddir of the Meson project.
 
         Args:
-            builddir: :class:`pathlib.Path` or :class:`str` pointing to the builddir.
+            builddir: :class:`pathlib.Path` pointing to the builddir.
         """
-        if self.builddir is not pathlib.Path:
-            self.builddir = pathlib.Path(builddir)
+        self.builddir = builddir
         if not self.builddir.is_dir():
             raise Exception(f'{self.builddir.as_posix()} is not a directory')
 

@@ -54,8 +54,21 @@ class MesonEdit(urwid.AttrMap):
     signals = ['changed']
     """:obj:`list` of :mod:`urwid` signal names the class can emit."""
 
-    def __init__(self, widget: urwid.Widget, attr_map: dict | str):
+    def __init__(self, widget: urwid.Widget, attr_map: dict):
         super().__init__(widget, attr_map)
+
+    def attr_map_from_str(self, color_name: str):
+        """
+        Creates an attribute map from a string to color the widget in a given color from :obj:`PALETTE`. This is a
+        workaround to get colors working, there are :mod:`urwid` examples that do not need this for colored widgets.
+
+        Args:
+            color_name: Color name as in :obj:`PALETTE`.
+
+        Returns:
+            :obj:`dict` formatted as ``{None: 'color_name'}``.
+        """
+        return {None: color_name}
 
     def get_value(self):
         """
@@ -71,15 +84,15 @@ class StringEdit(MesonEdit):
 
     Args:
         value: Initial value of the widget.
-        attr_map: Text color from :obj:`~.PALETTE`, mainly for :class:`ArrayEdit`.
+        widget_color_name: Text color from :obj:`~.PALETTE` as :obj:`str` (mainly for :class:`ArrayEdit`).
 
     Attributes:
         activated: :obj:`bool` that control whether input is used for editing or not. See :func:`keypress()`.
     """
-    def __init__(self, value: str, attr_map='string'):
+    def __init__(self, value: str, widget_color_name: str = 'string'):
         self.activated = False
         widget = urwid.Edit('', value, multiline=False, edit_pos=0, wrap=urwid.CLIP)
-        super().__init__(widget, attr_map)
+        super().__init__(widget, self.attr_map_from_str(widget_color_name))
 
     def get_value(self) -> str:
         """
@@ -130,7 +143,7 @@ class BooleanEdit(MesonEdit):
     def __init__(self, init_state: bool):
         self.state = init_state
         widget = urwid.SelectableIcon(repr(init_state))
-        super().__init__(widget, repr(init_state).lower())
+        super().__init__(widget, self.attr_map_from_str(repr(init_state).lower()))
 
     def set_state(self, state: bool) -> None:
         """
@@ -143,7 +156,7 @@ class BooleanEdit(MesonEdit):
             return
         self.state = state
         self.original_widget.set_text(repr(state))
-        self.set_attr_map({None: repr(state).lower()})
+        self.set_attr_map(self.attr_map_from_str(repr(state).lower()))
         urwid.emit_signal(self, 'changed')
 
     def get_value(self) -> bool:
@@ -205,8 +218,8 @@ class ComboEdit(MesonEdit):
             :obj:`dict` formatted as ``{None: 'color_name'}``.
         """
         if choice in ['enabled', 'true', 'disabled', 'false']:
-            return {None: choice}
-        return {None: 'choice'}
+            return self.attr_map_from_str(choice)
+        return self.attr_map_from_str('choice')
 
     def set_choice(self, choice_index: int) -> None:
         """
@@ -270,7 +283,7 @@ class IntegerEdit(MesonEdit):
     def __init__(self, value: int):
         self.activated = False
         widget = urwid.IntEdit('', value)
-        super().__init__(widget, 'integer')
+        super().__init__(widget, self.attr_map_from_str('integer'))
 
     def get_value(self) -> int:
         """
@@ -473,7 +486,7 @@ class Footer(urwid.Pile):
             for choice in option.choices:
                 choices_str += f' {choice}'
         text_l1 = f'{option.name}: {option.description}'
-        text_l2 = f'Section: {option.section}, Machine: {option.machine}, Type: {option.type}'
+        text_l2 = f'Section: {option.section.value}, Machine: {option.machine.value}, Type: {option.type.value}'
         self.text_info.set_text(f'{text_l1}\n{text_l2}\n{choices_str}')
 
 
